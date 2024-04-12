@@ -1,0 +1,6 @@
+flask
+scipy
+sklearn
+paddlepaddle
+paddlenlp
+openpyxl

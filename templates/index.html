@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <style>
+        div1{
+        font-size: 20px;
+        font-family: ARIAL,"Microsoft Yahei","微软雅黑";
+        }
+    </style>
+</head>
+<body>
+<h2 style="font-size: 32px; font-family: ARIAL;">Hello!<br>this is an information extraction app based on PaddleNLP.</h2>
+<div style="font-size: 24px; font-family: ARIAL;">
+    <table>
+        <th colspan="7" style="color: #F6CECE; font-size: 24px; background-color: #CEE3F6;">信息拆分</th>
+        <tr>
+            <td>/get </td>
+            <td>返回拆分结果</td>
+            <td>eg. <br><td><b>data </b></td><td colspan="2">{
+    'data': {
+        'text': ['{{egtext}}']
+    },
+    'parameters': {
+        'schema': []
+    }
+} <br></td><td><b>返回结果 </b></td><td> {{exmp1}} </td></td>
+        </tr>
+        <tr>
+            <td rowspan="4">/gc</td>
+            <td rowspan="4">按默认格式拆分后，返回整理后的结果</td>
+            <td rowspan="4"></td>
+            <td rowspan="4"><b>parameters  </b></td>
+            <tr><td align="text-top">getbym</td><td colspan="3"><b>True(default) </b>- 返回出生年月:str<br><b>False </b>- 返回出生年:int</td></tr>
+            <tr><td align="text-top">dealblend</td><td colspan="3"><b>False(default) - 是否分句分解</b> <br>会自动识别学习经历、工作经历，并分别进行信息提取，提高信息抽取率（略微增加运行时间）</td></tr>
+            <tr><td align="text-top">priorlayer</td><td colspan="3">False(default) - 是否优先采用分句分解的结果</td></tr>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+            <td><b>返回结果</b></td>
+            <td align="text-top" colspan="4">字典：<br>1.（固定键）性别、籍贯、出生年(getbym为True则 出生年月)<br><br>
+            2.（非固定键）单位、职务、行业、地址、学习经历(值为列表，列表元素固定键: 学校、院系、专业、入学年份、毕业年份、学历)、任职学校、毕业学校、曾任学校(曾任职的学校)</td>
+        </tr>
+        <tr>
+            <td rowspan="4">/gs</td>
+            <td rowspan="4">可按需调用预设置好的schema进行信息抽取</td>
+            <td rowspan="4"></td><td rowspan="4"><b>parameters  </b></td>
+            <tr><td align="text-top">schema</td>
+            <td colspan="3">自定义schema(list/dict) 或 <b>"工作经历" / "学习经历" / "基本信息"<br>default: 籍贯、性别、年龄、  行业、职务、单位、地址、  毕业院校、专业、入学年份、毕业年份、学位、学历</b></td></tr>
+            <tr><td>getbym:bool</td><td colspan="3">同上</td></tr>
+            <tr><td>returnmodelop</td><td colspan="3">True - 返回模型原始输出 <br><b>False(default)</b> - 返回输入schema对应的字典（取概率最大值）</td></tr>
+        </tr>
+
+        <th colspan="7" style="color: #DA81F5; font-size: 24px; background-color: #A9D0F5;">舆情分析</th>
+        <tr>
+            <td>/qgqx </td>
+            <td>情感倾向</td><td></td>
+            <td colspan="4">default schema: '情感倾向[正向，负向]'</td>
+        </tr>
+        <tr>
+            <td>/pjcq </td>
+            <td>评价抽取</td>
+            <td>eg. </td>
+            <td colspan="5">{
+    'data': {
+        'text': ['热烈祝贺06级物理系李媛媛校友荣获“第十四届全国中学物理青年教师教学大赛”高中组一等奖：06级李媛媛校友以重庆市高中物理青年教师优质课大赛一等奖第一名的优异成绩，代表重庆市参加全国大赛，荣获全国中学物理教学大赛高中组一等奖。']
+    },
+    'parameters': {
+        'schema': []
+    }
+} <br><b>返回结果：</b>
+            {
+        "评价维度": [
+            {
+                "end": 80,
+                "probability": 0.3306020525458422,
+                "relations": {
+                    "情感倾向[正向，负向]": [
+                        {
+                            "probability": 0.9671025016000385,
+                            "text": "正向"
+                        }
+                    ],
+                    "观点词": [
+                        {
+                            "end": 78,
+                            "probability": 0.9325285791346474,
+                            "start": 76,
+                            "text": "优异"
+                        }
+                    ]
+                },
+                "start": 78,
+                "text": "成绩"
+            }
+        ]
+    }</td>
+        </tr>
+    </table>
+</div>
+<div style="color: #316EC0; font-size: 24px; font-family: ARIAL; padding-top: 15px;">updates<br> 2024/4/3 模型未自主训练；<br>
+    2024/4/11 模型未自主训练；无法分开处理多段学习经历；<span style="color: #04B486;"> 增加了高校-任职关系的检验，增加了信息拆分的分段拆分功能，完善了信息拆分的数据结构，新增情感分析-情感倾向、评价抽取接口。</span>
+</div>
+</body>
+</html>
