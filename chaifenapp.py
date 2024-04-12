@@ -27,8 +27,8 @@ schemab = ["籍贯", '性别', '年龄']
 scheman = {}
 provided = {'学习经历': schemax, '工作经历': schemac, '基本信息': schemab}
 
-uie1 = Taskflow("information_extraction", schema=schema0, home_path='./.paddlenlp/')
-uie2 = Taskflow("information_extraction", schema=schemaz, home_path='./.paddlenlp/')#device_id=1
+uie1 = Taskflow("information_extraction", schema=schema0)
+uie2 = Taskflow("information_extraction", schema=schemaz)  # , home_path='./.paddlenlp/'
 # uie2 = None
 @app.route('/get',methods=["GET", "POST"])
 def getraw():
@@ -44,7 +44,7 @@ def getraw():
         schema = request.form['parameters']['schema'] if 'schema' in request.form['parameters'] else None
     if schema:
         scheman = schema
-        uie1.set_schema(schema)# = Taskflow("information_extraction", schema=schema, device_id=0)
+        uie1.set_schema(schema)
     else:
         scheman = {}
         uie1.set_schema(schema0)
@@ -254,9 +254,4 @@ def getcom():
 # app = SimpleServer()
 # app.register_taskflow('taskflow/uie', [uie1, uie2])
 if __name__ == '__main__':
-    # t = threading.Thread(target=worker)
-    # t.daemon = True
-    # t.start()
-    # 已经把端口改成80
-
     app.run(port=5000, host='0.0.0.0')#, threaded=True)
