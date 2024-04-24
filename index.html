@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <style>
+        div1{
+        font-size: 20px;
+        font-family: ARIAL,"Microsoft Yahei","微软雅黑";
+        }
+    </style>
+</head>
+<body>
+<h2 style="font-size: 32px; font-family: ARIAL;">Hello!<br>this is an information extraction app based on PaddleNLP.</h2>
+<div style="font-size: 24px; font-family: ARIAL;">
+    <table>
+        <th colspan="7" style="color: #F6CECE; font-size: 24px; background-color: #CEE3F6; padding-top: 15px; padding-bottom: 15px;">信息拆分</th>
+        <tr>
+            <td style="background-color: #FFFACD;">/get </td>
+            <td>返回拆分结果</td>
+            <td>eg. <br><td><b>data </b></td><td colspan="2">
+    body: {
+        'text': ['{{egtext}}']
+    }<br></td><td style="padding-bottom: 45px;"><b>返回结果 </b></td><td> {{exmp1}} </td></td>
+        </tr>
+        <tr>
+            <td rowspan="6" style="background-color: #9ACD32;">/gc</td>
+            <td rowspan="6">按默认格式拆分后，返回整理后的结果</td>
+            <td rowspan="6"></td>
+            <td rowspan="6"><b>parameters  </b></td>
+            <tr><td align="text-top">getbym</td><td colspan="3"><b>True(default) </b>- 返回出生年月:str<br><b>False </b>- 返回出生年:int</td></tr>
+            <tr><td align="text-top">dealblend</td><td colspan="3"><b>False(default) - 是否分段分解</b> <br>会自动识别学习经历、工作经历，并分别进行信息提取，提高信息抽取率（略微增加运行时间）</td></tr>
+            <tr><td align="text-top">priorlayer</td><td colspan="3">bool/int:False(default) - 是否优先采用分段分解的结果<br>2 - 仅返回分段分解的结果</td></tr>
+            <tr><td align="text-top">chopsentence</td><td colspan="3">bool/str: False(default) - 是否分句分解<br>- 或 用于分句的标点(例如: "；")</td></tr>
+            <tr><td align="text-top">puncby</td><td colspan="3">str/list: "；。，"(default) - 分段的节点</td></tr>
+        </tr>
+        <tr>
+            <td style="background-color: #9ACD32;"></td>
+            <td colspan="2"></td>
+            <td style="padding-bottom: 45px;"><b>返回结果</b></td>
+            <td align="text-top" colspan="4" style="padding-bottom: 45px;">字典：<br>1.（固定键）性别、籍贯、出生年(getbym为True则 出生年月)<br><br>
+            2.（非固定键）单位、职务、行业、地址、学习经历(值为列表，列表元素固定键: 学校、院系、专业、入学年份、毕业年份、学历)、任职学校、毕业学校、曾任学校(曾任职的学校)</td>
+        </tr>
+        <tr>
+            <td rowspan="4" style="background-color: #F6CECE;">/gs</td>
+            <td rowspan="4">可按需调用预设置好的schema进行信息抽取</td>
+            <td rowspan="4"></td><td rowspan="4"><b>parameters  </b></td>
+            <tr><td align="text-top">schema</td>
+            <td colspan="3">自定义schema(list/dict) 或 <b>"工作经历" / "学习经历" / "基本信息"<br>default: 籍贯、性别、年龄、  行业、职务、单位、地址、  毕业院校、专业、入学年份、毕业年份、学位、学历</b></td></tr>
+            <tr><td>getbym</td><td colspan="3">同上</td></tr>
+            <tr><td style="padding-bottom: 45px;">returnmodelop</td><td colspan="3" style="padding-bottom: 45px;">True - 返回模型原始输出 <br><b>False(default)</b> - 返回输入schema对应的字典（多个值用“、”连接）</td></tr>
+        </tr>
+
+        <th colspan="7" style="color: #DA81F5; font-size: 24px; background-color: #A9D0F5; padding-top: 15px; padding-bottom: 15px;">舆情分析</th>
+        <tr>
+            <td style="background-color: #D8BFD8;">/qgqx </td>
+            <td style="padding-top: 5px; padding-bottom: 45px;">情感倾向</td><td></td>
+            <td colspan="4" style="padding-top: 5px; padding-bottom: 45px;">default schema: "情感倾向[正向，中性，负向]"</td>
+            <td style="padding-top: 5px; padding-bottom: 45px;">分类任务，schema类型应为String，参照左边格式，不同类型用"，"分开</td>
+        </tr>
+        <tr>
+            <td style="padding-top: 15px; padding-bottom: 45px; background-color: 	#FFDAB9;">/pjcq </td>
+            <td style="padding-top: 15px; padding-bottom: 45px;">评价抽取</td>
+            <td style="padding-top: 15px; padding-bottom: 45px;">eg. </td>
+            <td colspan="5" style="padding-top: 15px; padding-bottom: 45px;">
+    body: {
+        'text': ['热烈祝贺06级物理系李媛媛校友荣获“第十四届全国中学物理青年教师教学大赛”高中组一等奖：06级李媛媛校友以重庆市高中物理青年教师优质课大赛一等奖第一名的优异成绩，代表重庆市参加全国大赛，荣获全国中学物理教学大赛高中组一等奖。']
+    }
+  <br><b>返回结果：</b>
+            {'成绩': {'情感倾向': {'probability': 0.9671025016000385, 'text': '正向'}, '观点词': '优异'}}
+            </td>
+        </tr>
+    </table>
+</div>
+<div style="color: #316EC0; font-size: 24px; font-family: ARIAL; padding-top: 15px;">updates<br> 2024/4/3 模型未自主训练；<br>
+    2024/4/11 模型未自主训练；无法分开处理多段经历；<span style="color: #04B486;"> 增加了高校-任职关系的检验，增加了信息拆分的分段拆分功能，完善了信息拆分的数据结构，新增情感分析-情感倾向、评价抽取接口。 </span><br>
+    2024/4/17 <span style="color: #04B486;"> 可以分开提取多段经历，推荐方法为gc/ + body<span style="background-color:#B0C4DE">{
+        "text": ["text1", "text2", ...],
+        "getbym": False,
+        "dealblend": True,
+        "priorlayer": True,
+        "chopsentence": "；"}</span></span>
+</div>
+</body>
+</html>

@@ -1,5 +1,6 @@
 # !/user/bin/env python3
 # -*- coding: utf-8 -*-
+import json
 import re
 import threading
 import time
@@ -97,18 +98,18 @@ def splitrowsto1col(df, splits=10):
     return pd.concat(l)[df.columns].sort_values(by=["单位", "姓名"])
 
 def dc_simi(l):
-    return len([x for x in l if [y for y in l if x in y and x !=y]]) == 0
+    return len([x for x in l if [y for y in l if x in y and x !=y]]) > 0
 
 
 
 
-def maxprob(l):
+def maxprob(l, default=""):
     """
     paddlenlp
     :param l:
     :return:
     """
-    return max(l, key=lambda x: x['probability']) if l else ""
+    return max(l, key=lambda x: x['probability']) if l else default
 
 
 def maxl(l):
@@ -167,3 +168,70 @@ class MyThread(threading.Thread):
         except Exception:
             return None
 
+
+def wash(t, s):
+    return '，'.join(spillt(t, s))
+
+
+def meval(o):
+    if type(o) is not str:
+        return o
+    try:
+        return eval(o)
+    except:
+        try:
+            return json.loads(o)
+        except:
+            return o
+
+
+def replall(t, sp, tg):
+    for s in sp:
+        t = t.replace(s, tg)
+    return t
+
+
+def spread(l, sp="\n"):
+    l = [x if len(x) > 0 else "0" for x in l]
+    res = (sp if sp else '\n').join(l).split(sp if sp else "\n")
+    res = [x if x != "0" else "" for x in res]
+    return res
+
+
+def sticktog(A):
+    """
+    数组并集
+    """
+    assert type(A) is list
+    if len(A) == 0:
+        return [(999,)]
+    res = [(A[0]["start"], A[0]["end"])]
+    i = 0
+    while i < len(A) - 1:
+        j = i + 1
+        l = min(A[i]["start"], A[j]["start"])
+        r = max(A[i]["end"], A[j]["end"])
+        if A[j]["start"] <= A[i]["end"] + 1:
+            res = res[:-1]
+            res.append((l, r))
+        else:
+            res.append((A[j]["start"], A[j]["end"]))
+        i += 1
+
+    return res
+
+def sortlist(l, k):
+    l.sort(key=lambda x: x[k])
+    return l
+
+
+def orgnize_rslt(l, default={}):
+    """
+    maxprob or joind judging by dc_simi
+    :param l:
+    :return:
+    """
+    if dc_simi([x.get("text", "") for x in l]):
+        return maxprob(l, default).get("text", "")
+    else:
+        return joind([x.get("text", "") for x in l])
